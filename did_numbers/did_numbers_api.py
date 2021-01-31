@@ -98,3 +98,15 @@ def update_did_number(id):
         db_session.add(did_number)
         db_session.commit()
         return jsonify({'data': did_number.serialized})
+
+
+@bp.route('/<int:id>/delete', methods=('DELETE',))
+def delete_did_number(id):
+    did_number = db_session.query(DIDNumber).get(id)
+    if did_number is None:
+        return jsonify(
+            {'message': 'The resource was not found on this server'}
+        ), 404
+    db_session.delete(did_number)
+    db_session.commit()
+    return jsonify(success=True)
