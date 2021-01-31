@@ -8,7 +8,17 @@ class DIDNumber(Base):
     id = Column(Integer, primary_key=True)
 
     value = Column(String(), nullable=False)
-    monthly_price = Column(String(), nullable=False)
-    setup_price = Column(Integer, nullable=False)
     monthly_price = Column(Integer, nullable=False)
+    setup_price = Column(Integer, nullable=False)
     currency = Column(String(), nullable=False)
+
+    @property
+    def serialized(self):
+        """Returns object data in serialized format"""
+        return {
+            'id': self.id,
+            'value': self.value,
+            'monthlyPrice': self.monthly_price,
+            'setupPrice': self.setup_price,
+            'currency': self.currency
+        }

@@ -7,3 +7,14 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
+    command: ["./wait-for-it.sh", "db:5432", "--", "flask", "run"]
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=didnumbers
+      - POSTGRES_USER=psqluser
+      - POSTGRES_PASSWORD=abcd1234
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:

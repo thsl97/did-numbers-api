@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from flask.cli import with_appcontext
 
 
-SQL_ALCHEMY_DATABASE_URL = 'sqlite://'
+SQL_ALCHEMY_DATABASE_URL = 'postgresql://psqluser:abcd1234@db:5432/didnumbers'
 
 
 engine = create_engine(SQL_ALCHEMY_DATABASE_URL)

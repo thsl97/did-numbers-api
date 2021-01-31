@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 
 from did_numbers.database import db_session
 from did_numbers.models import DIDNumber
@@ -11,4 +11,4 @@ bp = Blueprint('did-numbers', __name__, url_prefix='/did-numbers')
 def get_did_numbers():
     """Gets a list of all did numbers"""
     did_numbers = db_session.query(DIDNumber).all()
-    print(did_numbers)
+    return jsonify({'data': [object.serialized for object in did_numbers]})
