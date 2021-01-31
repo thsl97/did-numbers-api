@@ -33,8 +33,9 @@ class DIDNumber(Base):
         phone_pattern = re.compile(
             r'^\+(\d{2}) (\d{2}) (\d{5})-(\d{4})$'
         )
-        assert phone_pattern.match(address) is True, ('Value does not match '
-                                                      'correct pattern')
+        assert bool(phone_pattern.match(address)) is True, ('Value does not '
+                                                            'match correct '
+                                                            'pattern')
         return address
 
     @validates('monthly_price', 'setup_price')

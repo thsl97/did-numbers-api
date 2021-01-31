@@ -1,5 +1,3 @@
-import re
-
 from flask import Blueprint, request, jsonify
 
 from did_numbers.database import db_session
