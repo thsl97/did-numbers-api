@@ -28,7 +28,10 @@ def create_did_number():
             return jsonify(
                 {'message': f'DID Number {field} must be informed'}
             ), 400
-    if not re.match(r'^\+\d{2} \d{2} \d{5}-\d{4}', data['value']):
+    phone_pattern = re.compile(
+        r'^\+(\d{2}) (\d{2}) (\d{5})-(\d{4})$'
+    )
+    if not phone_pattern.match(data['value']):
         return jsonify(
                 {'message': 'DID Number value must be in correct format'}
             ), 400
@@ -49,3 +52,49 @@ def create_did_number():
     db_session.add(new_number)
     db_session.commit()
     return jsonify({'data': new_number.serialized}), 201
+
+
+@bp.route('/<int:id>/update', methods=('PATCH',))
+def update_did_number(id):
+    did_number = db_session.query(DIDNumber).get(id)
+    if did_number is None:
+        return jsonify(
+            {'message': 'The resource was not found on this server'}
+        ), 404
+    else:
+        data = request.get_json()
+        if 'value' in data:
+            phone_pattern = re.compile(
+                r'^\+(\d{2}) (\d{2}) (\d{5})-(\d{4})$'
+            )
+            if not phone_pattern.match(data['value']):
+                return jsonify(
+                        {'message': 'DID Number value must be in correct '
+                                    'format'}
+                    ), 400
+            did_number.value = data['value']
+        if 'monthlyPrice' in data:
+            try:
+                int(data['monthlyPrice'] * 100)
+                did_number.monthly_price = data['monthlyPrice']
+            except ValueError:
+                return jsonify(
+                    {'message': 'Incorrect format for monthlyPrice'}
+                ), 400
+        if 'setupPrice' in data:
+            try:
+                int(data['setupPrice'] * 100)
+                did_number.setup_price = data['setupPrice']
+            except ValueError:
+                return jsonify(
+                    {'message': 'Incorrect format for setupPrice'}
+                ), 400
+        if 'currency' in data:
+            if not data['currency']:
+                return jsonify(
+                    {'message': 'Currency must not be empty'}
+                ), 400
+            did_number.currency = data['currency']
+        db_session.add(did_number)
+        db_session.commit()
+        return jsonify({'data': did_number.serialized})
