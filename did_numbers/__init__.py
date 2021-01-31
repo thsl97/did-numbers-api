@@ -36,6 +36,6 @@ def create_app(test_config=None):
 
     # register commands
     from did_numbers import database
-    database.init_app(app)
+    database.init_db()
 
     return app

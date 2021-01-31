@@ -31,8 +31,8 @@ def create_did_number():
     try:
         new_number = DIDNumber(
             value=data['value'],
-            monthly_price=data['monthlyPrice'] * 100,
-            setup_price=data['setupPrice'] * 100,
+            monthly_price=float(data['monthlyPrice']) * 100,
+            setup_price=float(data['setupPrice']) * 100,
             currency=data['currency']
         )
         db_session.add(new_number)
@@ -40,6 +40,8 @@ def create_did_number():
         return jsonify({'data': new_number.serialized}), 201
     except AssertionError as e:
         return jsonify(str(e)), 400
+    except ValueError:
+        return jsonify('Incorrect format for price'), 400
 
 
 @bp.route('/<int:id>/update', methods=('PATCH',))
@@ -55,9 +57,9 @@ def update_did_number(id):
         if 'value' in data:
             did_number.value = data['value']
         if 'monthlyPrice' in data:
-            did_number.monthly_price = data['monthlyPrice'] * 100
+            did_number.monthly_price = float(data['monthlyPrice']) * 100
         if 'setupPrice' in data:
-            did_number.setup_price = data['setupPrice'] * 100
+            did_number.setup_price = float(data['setupPrice']) * 100
         if 'currency' in data:
             did_number.currency = data['currency']
         try:
@@ -66,6 +68,8 @@ def update_did_number(id):
             return jsonify(did_number.serialized)
         except AssertionError as e:
             return jsonify(str(e)), 400
+        except ValueError:
+            return jsonify('Incorrect format for price'), 400
 
 
 @bp.route('/<int:id>/delete', methods=('DELETE',))

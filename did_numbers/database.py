@@ -24,16 +24,3 @@ def init_db():
     """Initializes the database"""
     from did_numbers.models import DIDNumber  # noqa: F401
     Base.metadata.create_all(bind=engine)
-
-
-@click.command('create-db')
-@with_appcontext
-def create_db_command():
-    """Adds a cli command for database initialization"""
-    init_db()
-    click.echo('Database initialized')
-
-
-def init_app(app):
-    """Adds the create_db_command to flask cli"""
-    app.cli.add_command(create_db_command)
