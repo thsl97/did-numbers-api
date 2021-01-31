@@ -18,7 +18,7 @@ class DIDNumber(Base):
         return {
             'id': self.id,
             'value': self.value,
-            'monthlyPrice': self.monthly_price,
-            'setupPrice': self.setup_price,
+            'monthlyPrice': self.monthly_price / 100,
+            'setupPrice': self.setup_price / 100,
             'currency': self.currency
         }
