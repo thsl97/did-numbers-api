@@ -24,9 +24,18 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # register blueprints
+    from did_numbers import did_numbers_api
+    app.register_blueprint(did_numbers_api.bp)
+
+    # closes database connection when app session ends
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         from did_numbers.database import db_session
         db_session.remove()
+
+    # register commands
+    from did_numbers import database
+    database.init_app(app)
 
     return app
